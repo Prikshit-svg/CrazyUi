@@ -31,11 +31,9 @@ fun SocialLinkRow(link: SocialLink, onItemClick: (String) -> Unit) {
 
         SocialButton(
 
-            pressedColor = link.color.copy(alpha = 0.8f), // A slightly faded version for press
+
             icon =link.iconRes,
-            onClick = {
-                onItemClick(link.url)
-            }
+            onClick = { onItemClick(link.url) }
         )
         Text(
             text =link.label,

@@ -6,6 +6,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -36,7 +37,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SocialButton(
 
-    pressedColor : Color,
+
     icon : Int,
     onClick : () -> Unit = {}
 ){
@@ -83,13 +84,12 @@ fun SocialButton(
         contentAlignment = Alignment.Center
     ) {
 
-        Icon(
+        Image(
             painter = painterResource(icon),
-            contentDescription = null,
-
-            modifier = Modifier.offset(y = offsetY)
-
-
+            contentDescription = null, // Provide a description for accessibility
+            modifier = Modifier
+                .size(48.dp) // Give the logo a specific size
+                .offset(y = offsetY)
         )
     }
 }
