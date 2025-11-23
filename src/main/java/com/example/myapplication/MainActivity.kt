@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Spacer(Modifier.padding(innerPadding))
                    Drawer()
+
                 }
             }
         }
