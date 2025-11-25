@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Spacer(Modifier.padding(innerPadding))
-                   Drawer()
+                   CameraScreen()
 
                 }
             }
