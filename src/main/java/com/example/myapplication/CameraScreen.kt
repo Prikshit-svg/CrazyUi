@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.Manifest
-import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -15,41 +14,44 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import kotlin.contracts.contract
+import com.example.myapplication.viewmodels.CameraViewmodel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun CameraScreen(){
+fun CameraScreen(viewmodel: CameraViewmodel = viewModel() ){
     val context= LocalContext.current
     val lifecycleOwner= LocalLifecycleOwner.current
-    var hasCameraPermission= remember{ //self checks whether the user has already granted camera permission or not
-        ContextCompat.checkSelfPermission(context,
-            Manifest.permission.CAMERA)== PackageManager.PERMISSION_GRANTED
+    LaunchedEffect(Unit) {
+        viewmodel.initializeCamera(context)
     }
     val permissionsLauncher= rememberLauncherForActivityResult(//creates a permission launcher
         // which can be called later to request permission
         ActivityResultContracts.RequestPermission()){
-        granted->//assigns the value to the variable based on whether user clicked true or false
-        hasCameraPermission=granted
+        granted-> //assigns the value to the variable based on whether user clicked true or false
+        viewmodel.onPermissionResult(granted)
     }
-    val imageCapture=rememberImageCaptureUseCase()
-    if(hasCameraPermission){
+    val imageCaptureUseCase= rememberImageCaptureUseCase()
+    LaunchedEffect(imageCaptureUseCase) {
+        viewmodel.setImageCaptureInstance(imageCaptureUseCase)
+    }
+
+    if(viewmodel.hasCameraPermission){
         CameraPreview(
-            imageCapture,
+            viewmodel.imageCapture,
             lifecycleOwner,
-            modifier= Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         )
     }
     Scaffold(
         bottomBar = {
-            if (hasCameraPermission){
+            if (viewmodel.hasCameraPermission){
                 BottomAppBar {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -57,12 +59,8 @@ fun CameraScreen(){
                         verticalArrangement = Arrangement.Center
                     ) {
                         Button(
-                            onClick={ 
-                             // Trigger capture when button is pressed
-                                capturePhoto(
-                                    imageCapture = imageCapture,
-                                    context = context
-                                )
+                            onClick={
+                                viewmodel.onPhotoCaptureClicked(context)
                              }
                         ) {Text("Capture") }
                     }
@@ -73,8 +71,8 @@ fun CameraScreen(){
         Box(Modifier.fillMaxSize()
             .padding(it)){
 
-            if(hasCameraPermission){
-                CameraPreview(imageCapture,lifecycleOwner,Modifier.fillMaxSize())
+            if(viewmodel.hasCameraPermission){
+                CameraPreview(viewmodel.imageCapture,lifecycleOwner,Modifier.fillMaxSize())
             }
             else{//ask for permission
                 Column(Modifier.fillMaxSize().padding(16.dp),
@@ -100,5 +98,5 @@ fun CameraScreen(){
 @Preview(showSystemUi = true)
 @Composable
 fun CameraScreenPreview(){
-    CameraScreen()
+   // CameraScreen()
 }

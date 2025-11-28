@@ -17,7 +17,7 @@ import androidx.camera.core.ImageCapture.OutputFileResults
 
 
 fun capturePhoto(
-    imageCapture : ImageCapture,
+    imageCapture : ImageCapture?,
     context : Context
 ){
     val name= SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.US)
@@ -51,7 +51,7 @@ MediaStore.Video.Media.EXTERNAL_CONTENT_URI → for videos
 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI → for music
     */
 
-    imageCapture.takePicture(
+    imageCapture?.takePicture(
         outputOption,
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageSavedCallback{

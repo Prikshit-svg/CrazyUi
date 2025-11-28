@@ -1,9 +1,7 @@
 package com.example.myapplication
 
 import android.content.ContentValues.TAG
-import android.nfc.Tag
 import android.util.Log
-import androidx.camera.core.CameraProvider
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -20,9 +18,9 @@ import androidx.core.content.ContextCompat
 
 @Composable
 fun CameraPreview(
-    imageCapture: ImageCapture,
-    lifecycleOwner: LifecycleOwner,
-    modifier : Modifier=Modifier//This composable accepts a Modifier, but if you don’t
+    imageCapture : ImageCapture?,
+    lifecycleOwner : LifecycleOwner,
+    modifier : Modifier =Modifier//This composable accepts a Modifier, but if you don’t
 // provide one, it will use a default empty modifier.
 ){
     val context= LocalContext.current
